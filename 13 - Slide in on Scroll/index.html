@@ -44,6 +44,7 @@
   </div>
 
   <script>
+    //A func is passed in it and it will hit that func according to every milisecond given in the 2nd param
     function debounce(func, wait = 20, immediate = true) {
       var timeout;
       return function() {
@@ -59,8 +60,35 @@
       };
     }
 
-  </script>
+    const sliderImages = document.querySelectorAll('.slide-in');
 
+    function checkSlider(e){
+      sliderImages.forEach(sliderImage => {
+        /*
+        * All will be returned in pixel
+        * Window.scrollY = Determines the vartical distance from the top of the window.
+        *  Window.innerHeight = Determining the height of the browser's window
+        */
+        const slideInHalf = (window.scrollY + window.innerHeight) - (sliderImage.height / 2);
+
+        //img.offsetTop is giving me the vertical Top position of the image
+        const imageBottom = sliderImage.offsetTop + sliderImage.height;
+
+        const isHalfShown = slideInHalf > sliderImage.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;
+
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active');
+        } else {
+          sliderImage.classList.remove('active');
+        }
+      })
+    }
+
+    window.addEventListener('scroll', debounce(checkSlider));
+
+  </script>
+  
   <style>
     html {
       box-sizing: border-box;
@@ -113,9 +141,10 @@
       transform: translateX(30%) scale(0.95);
     }
 
+    /* scale function is used to resize the image. When it is 1, it is in full size.  */
     .slide-in.active {
       opacity: 1;
-      transform: translateX(0%) scale(1);
+      transform: translateX(0%) scale(1); 
     }
 
   </style>
