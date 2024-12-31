@@ -67,9 +67,9 @@
         /*
         * All will be returned in pixel
         * Window.scrollY = Determines the vartical distance from the top of the window.
-        *  Window.innerHeight = Determining the height of the browser's window
+        * Window.innerHeight = Determining the height of the browser's window
         */
-        const slideInHalf = (window.scrollY + window.innerHeight) - (sliderImage.height / 2);
+        const slideInHalf = (window.scrollY + window.innerHeight) - (sliderImage.height / 2);//Calculating half of the image in the window
 
         //img.offsetTop is giving me the vertical Top position of the image
         const imageBottom = sliderImage.offsetTop + sliderImage.height;
