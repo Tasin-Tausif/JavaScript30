@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Videos</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <ul class="videos">
     <li data-time="5:43">
@@ -182,7 +184,28 @@
       Video 58
     </li>
   </ul>
-<script>
-</script>
+  <script>
+    const timeNodes = [...document.querySelectorAll('[data-time]')];
+
+    const seconds = timeNodes
+      .map(nodes => nodes.dataset.time)
+      .map(timeCode => {
+        const [mins, secs] = timeCode.split(':').map(parseFloat);//Value assigning using destructor
+        return (mins * 60) + secs;
+      })
+      .reduce((total, vidSeconds) => total + vidSeconds);//Takes an array as input and gives one specific input as a string/num/etc. Here we need to pass 2 variable always and first one will be accumulator(here, the total values will be stored after each iteration) and second one would be next element.
+
+      let remainingSeconds = seconds;
+
+      const hours = Math.floor(remainingSeconds / 3600);
+      remainingSeconds = remainingSeconds % 3600;
+
+      const minutes = Math.floor(remainingSeconds/ 60);
+      remainingSeconds = remainingSeconds % 60;
+
+      console.log(hours, minutes, remainingSeconds);
+
+  </script>
 </body>
+
 </html>

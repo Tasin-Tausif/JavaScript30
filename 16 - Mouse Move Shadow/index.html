@@ -41,9 +41,11 @@
   const walk = 500;
 
   function shadow(e) {
-    const { offsetWidth: width, offsetHeight: height } = hero;
-    let { offsetX: x, offsetY: y } = e;
+    //This assignment is known as destructing assignment
+    const { offsetWidth: width, offsetHeight: height } = hero;//offsetHeight and offsetWidth is used to represent the height and width of the element
+    let { offsetX: x, offsetY: y } = e;//represents the co-ordination of mouse pointer
 
+    //e.target is used to check if the parent element has any descendant or not
     if (this !== e.target) { 
       x += e.target.offsetLeft;
       y += e.target.offsetTop;
