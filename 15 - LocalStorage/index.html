@@ -46,7 +46,7 @@
   <script>
     const addItems = document.querySelector('.add-items');
     const itemsList = document.querySelector('.plates');
-    const items = [];
+    const items = JSON.parse(localStorage.getItem('myItems')) || [];//Fetching data from the localStorage. Since, data stored in localStorage as a string, to bring it into regular format, JSON.Parse was used
 
     function addItem(e) {
       e.preventDefault();
@@ -59,6 +59,7 @@
 
       items.push(obj);
       populateList(items, itemsList);
+      localStorage.setItem('myItems', JSON.stringify(items));//Setting data into localStorage. Since only a string can be inserted, converting the data into a string with the stringify method
       this.reset();
     }
 
@@ -73,7 +74,21 @@
       }).join('');
     }
 
+    //using eventDelegation here. It means, if something is clicked on it's higher level, it'll only trigger if the targeted thing matchs
+    function toggleDone(e){
+      if(!e.target.matches('input')) return; //Meaning, return from the function if target doesn't match with an input
+      const eventElement = e.target;
+      const index = eventElement.dataset.index;
+
+      items[index].done = !items[index].done;
+      localStorage.setItem('myItems', JSON.stringify(items));
+      populateList(items, itemsList);
+    }
+
     addItems.addEventListener('submit', addItem);//Here, submit is referring to submit event not the submit button
+    itemsList.addEventListener('click', toggleDone);
+    populateList(items, itemsList);
+
   </script>
 
 
