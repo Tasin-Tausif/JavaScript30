@@ -13,17 +13,34 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  const recognition = new SpeechRecognition();
+  const recognition = new SpeechRecognition();//Initiating an object of the webSpeech Api
   recognition.interimResults = true;
 
   let para = document.createElement('p');
   const words = document.querySelector('.words');
   words.appendChild(para);
 
+  //result and end are 2 events of the SpeechRecognition's object
   recognition.addEventListener('result', e => {
-    console.log(e);
-    
+    const transcription = Array.from(e.results)
+    .map(result => result[0])
+    .map(data => data.transcript)
+    .join('');
+
+    para.textContent = transcription;
+
+    if(e.results[0].isFinal){//isFinal is set to false by default and toggles when a gap is found in the speaker. And turns off listening
+
+      para = document.createElement('p');
+      words.appendChild(para);
+    }
+
+    if (transcription.includes('triggering word that will fire')) {
+      console.log('Fired');
+    }
   })
+
+  recognition.addEventListener('end', recognition.start);//Here, after mentioning the event name, the listener is just called. Not running here. It will run from here if () is given after the listener name.
 
   recognition.start();
 
