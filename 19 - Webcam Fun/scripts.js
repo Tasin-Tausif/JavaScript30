@@ -31,7 +31,11 @@ function paintToCanvas(){
         let pixels = ctx.getImageData(0, 0, width, height);
         
         //Applying effect
-        pixels = redEffect(pixels);
+        // pixels = redEffect(pixels);
+        // pixels = rgbSplit(pixels);
+        pixels = greenScreen(pixels);
+
+        pixels.globalAlpha = 0.1;
 
         //Putting it back in the canvas
         ctx.putImageData(pixels);
@@ -52,8 +56,51 @@ function takeSnap(){
     strip.insertBefore(link, strip.firstChild);//This is prepending(Inserting as the first element) in VanillaJS
 }
 
-function redEffect(){
-    
+function redEffect(pixels){
+    for( i = 0; i < pixels.data.length; i += 4){
+        pixels.data[i + 0] = pixels.data[i + 0] +100;//red
+        pixels.data[i + 1] = pixels.data[i + 1] - 50;//green
+        pixels.data[i + 2] = pixels.data[i + 2] * .5;//blue
+    }
+
+    return pixels;
+}
+
+function rgbSplit(pixels){
+    for( i = 0; i < pixels.data.length; i += 4){
+        pixels.data[i - 150] = pixels.data[i + 0] +100;//red
+        pixels.data[i + 100] = pixels.data[i + 1] - 50;//green
+        pixels.data[i - 350] = pixels.data[i + 2] * .5;//blue
+    }
+
+    return pixels;
+}
+
+function greenScreen(pixels){
+    const levels = {};
+
+    document.querySelectorAll('.rgb input').forEach(input => {
+        levels[input.name] = input.value;
+    });
+
+    for(i = 0; i < pixels.data.length; i += 4){
+        red = pixels[i + 0];
+        green = pixels[i + 1];
+        blue = pixels[i + 2];
+        alpha = pixels[i + 3];
+
+        //Here, making the vanishing the color that is selected from the slider
+        if(red >= levels.rmin &&
+           green >= levels.gmin &&
+           blue >= levels.blue &&
+           red <= levels.rmax &&
+           blue <= levels.bmax &&
+           green <= levels.gmax 
+        )
+        alpha = 0;
+    }
+
+    return pixels;
 }
 
 getVideo();
