@@ -60,6 +60,18 @@
     /*Compass: https://thenounproject.com/search/?q=compass&i=592352*/
   </style>
   <script>
+
+    const arrow = document.querySelector('.arrow');
+    const speed = document.querySelector('.speed');
+
+    navigator.geolocation.watchPosition((data) => {
+      // console.log(data);
+      speed.textContent = data.coords.speed ? Math.round(data.coords.speed) : 0.00;
+      arrow.style.transform = `rotate(${data.coords.heading !== null ? data.coords.heading : 0}deg)`;
+    }, (err => {
+      console.log('Please allow the location permission');
+      alert('Please allow the location permission');
+    }))
   </script>
 </body>
 </html>
