@@ -30,12 +30,22 @@
     </div>
 
 <script>
+  //Key difference between speechSynthesis and SpeechSynthesisUtterance are, 1st one can read any text to speech with speak, pause, cancel and resume method. Whereas 2nd one works for small texts but has large variant of methods
   const msg = new SpeechSynthesisUtterance();
   let voices = [];
   const voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+  const text = document.querySelector("[name='text']").value;
+
+  function populateVoice(){
+    voices = this.getVoices();
+    console.log(voices);
+  }
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoice);
 </script>
 
 </body>
