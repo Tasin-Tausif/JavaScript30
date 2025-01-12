@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+  const divs = document.querySelectorAll('div');
+
+  //Bubbling refers to the behave where, if an item is nested and the child is clicked/triggered, the item will fire the event as well as it's ancestors too. Basically, in browser, if we click something, it goes deeper one by one and event is fired similarly to the returning position.
+  function fireEvent(e){
+    console.log(this.classList.value);//To get or use class attribute, use classList
+    e.stopPropagation();//It stops the bubbling effect and occurs only once
+  }
+
+  divs.forEach(div => {
+    div.addEventListener('click', fireEvent, {
+      capture:true,//By default capture is true in bubbling effect. But if we turn it true, it'll do bubbling oppositely
+      once:true//If it is turned true, the complete bubbling effect will be done once, Though it's clicked multiple times
+    });//In the event listener, the third parameter contains the optional events.
+  })
+</script>
+</body>
+</html>
