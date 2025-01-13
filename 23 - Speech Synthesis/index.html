@@ -34,18 +34,48 @@
   const msg = new SpeechSynthesisUtterance();
   let voices = [];
   const voicesDropdown = document.querySelector('[name="voice"]');
-  const options = document.querySelectorAll('[type="range"], [name="text"]');
+  const options = document.querySelectorAll('[type="range"], [name="text"]');//Getting those dataas only that matches one of these conditions
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
 
-  const text = document.querySelector("[name='text']").value;
+  msg.text = document.querySelector("[name='text']").value;//Assigning text in the SpeechSynthesisUtterance method
 
   function populateVoice(){
     voices = this.getVoices();
-    console.log(voices);
+    voicesDropdown.innerHTML = voices.map(voice =>
+      `<option value="${voice.name}">${voice.name} (${voice.lang}) </option>`
+    ).join('');
   }
 
+  function setVoice(){
+    msg.voice = voices.find(voice => voice.name === this.value);//Assigning voice in the SpeechSynthesisUtterance method
+    toggle();
+  }
+
+  function toggle(startOver = true){
+    speechSynthesis.cancel();
+    if(startOver){
+      speechSynthesis.speak(msg);
+    }
+  }
+
+  function setOption(){
+    msg[this.name] = this.value;
+    toggle();
+  }
+
+  options.forEach(option => {
+    option.addEventListener('change', setOption);
+  })
+
+  //At the beginning, speechSynthesis might not load voice data. Whenever it'll load data/update the list, the voiceChanged event will triiger
   speechSynthesis.addEventListener('voiceschanged', populateVoice);
+  voicesDropdown.addEventListener('change', setVoice);
+  speakButton.addEventListener('click', toggle);
+  
+  //If we need to pass an argment in the function from eventListener, we need to use the following two methods. We cannot directly pass the value as argument
+  // stopButton.addEventListener('click', toggle.bind(null, false));//Bind creates a new func and passes the argument
+  stopButton.addEventListener('click', () => {toggle(false)});
 </script>
 
 </body>
