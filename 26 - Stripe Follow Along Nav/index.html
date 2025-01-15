@@ -226,13 +226,33 @@
   const nav = document.querySelector('.top');
 
   function handleEnter(){
-    
+    this.classList.add('trigger-enter');
+
+    //Bellow it is a shortcut of if condition that if 'trigger-enter' class is present, add that class.
+    setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150); // Since it's an arrow function, here, 'this' will contain the value of its parent. But, if it was a regular function and inside the function, 'this' was called, it would contain the window.
+    background.classList.add('open');
+
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoOrds = dropdown.getBoundingClientRect();//getBoundingClientRect tells where in the page actually the item is
+    const navCoOrds = nav.getBoundingClientRect();
+
+    const coOrds = {
+      height : dropdownCoOrds.height,
+      width : dropdownCoOrds.width,
+      top : dropdownCoOrds.top - navCoOrds.top,
+      left : dropdownCoOrds.left - navCoOrds.left
+    };
+
+    background.style.setProperty('width', `${coOrds.width}px`);
+    background.style.setProperty('height', `${coOrds.height}px`);
+    background.style.setProperty('transform', `translate(${coOrds.left}px, ${coOrds.top}px)`)//left is at the position of X and Top at Y
+
   }
   
   function handleLeave(){
-
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
   }
-
 
   triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
   triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
